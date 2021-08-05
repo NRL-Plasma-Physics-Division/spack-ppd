@@ -18,13 +18,20 @@ class Uqtk(CMakePackage):
     version('3.1.0', sha256='56ecd3d13bdd908d568e9560dc52cc0f66d7bdcdbe64ab2dd0147a7cf1734f97')
     version('3.0.4', sha256='0a72856438134bb571fd328d1d30ce3d0d7aead32eda9b7fb6e436a27d546d2e')
 
-    variant('pyuqtk', multi=True, values=('ON', 'OFF'), default='OFF',
+    variant('pyuqtk', default=True,
             description='Compile Python scripts and interface to C++ libraries')
 
     depends_on('expat')
     depends_on('sundials', when='@3.1.0:')
     depends_on('blas', when='@3.1.0:')
     depends_on('lapack', when='@3.1.0:')
+
+    extends('python', when='+pyuqtk')
+    depends_on('py-numpy', when='+pyuqtk')
+    depends_on('py-scipy', when='+pyuqtk')
+    depends_on('py-matplotlib', when='+pyuqtk')
+    depends_on('swig', when='+pyuqtk')
+
 
     # Modify the process of directly specifying blas/lapack
     # as the library name.
@@ -45,7 +52,12 @@ class Uqtk(CMakePackage):
             '-DCMAKE_SUNDIALS_DIR={0}'.format(spec['sundials'].prefix),
             '-DLAPACK_LIBRARIES={0}'.format(lapack_libs),
             '-DBLAS_LIBRARIES={0}'.format(blas_libs),
-            self.define_from_variant('PyUQTk', 'pyuqtk')
         ]
+        if self.spec.variants['pyuqtk'].value == True:
+            args.extend([
+                f"-DPyUQTk=ON",
+                #f"-DPYTHON_EXECUTABLE:FILEPATH={spec['python'].prefix.bin}/python",
+                #f"-DPYTHON_LIBRARY:FILEPATH={spec['python'].prefix}",
+        ])
 
         return args
