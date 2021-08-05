@@ -61,3 +61,6 @@ class Uqtk(CMakePackage):
         ])
 
         return args
+
+    def setup_run_environment(self, env):
+        env.prepend_path('PYTHONPATH', self.prefix)
