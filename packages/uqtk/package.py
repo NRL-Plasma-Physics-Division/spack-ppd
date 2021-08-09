@@ -30,8 +30,8 @@ class Uqtk(CMakePackage):
     depends_on('py-numpy', when='+pyuqtk')
     depends_on('py-scipy', when='+pyuqtk')
     depends_on('py-matplotlib', when='+pyuqtk')
+    depends_on('py-pymc3', when='+pyuqtk')
     depends_on('swig', when='+pyuqtk')
-
 
     # Modify the process of directly specifying blas/lapack
     # as the library name.
@@ -53,14 +53,16 @@ class Uqtk(CMakePackage):
             '-DLAPACK_LIBRARIES={0}'.format(lapack_libs),
             '-DBLAS_LIBRARIES={0}'.format(blas_libs),
         ]
-        if self.spec.variants['pyuqtk'].value == True:
-            args.extend([
-                f"-DPyUQTk=ON",
-                #f"-DPYTHON_EXECUTABLE:FILEPATH={spec['python'].prefix.bin}/python",
-                #f"-DPYTHON_LIBRARY:FILEPATH={spec['python'].prefix}",
-        ])
+
+        if self.spec.variants['pyuqtk'].value:
+            args.extend(['-DPyUQTk=ON'])
 
         return args
 
     def setup_run_environment(self, env):
-        env.prepend_path('PYTHONPATH', self.prefix)
+        if self.spec.variants['pyuqtk'].value:
+            env.prepend_path('PYTHONPATH', self.prefix)
+            env.prepend_path('PYTHONPATH', '{0}/PyUQTk'.format(self.prefix))
+            env.prepend_path('LD_LIBRARY_PATH', '{0}/PyUQTk/'.format(self.prefix))
+            env.set('UQTK_SRC', self.prefix)
+            env.set('UQTK_INS', self.prefix)
