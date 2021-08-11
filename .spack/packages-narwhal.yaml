@@ -1,0 +1,8 @@
+packages:
+  mpich:
+    externals:
+    - spec: "mpich%gcc@10.3.0 arch=cray-sles15-zen2"
+      modules:
+      - cray-mpich
+  globalarrays:
+    variants: [armci=mpi-pr, scalapack=True]

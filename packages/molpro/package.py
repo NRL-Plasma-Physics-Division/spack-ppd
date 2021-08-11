@@ -7,9 +7,7 @@ from spack import *
 
 class Molpro(CMakePackage):
     """Molpro is a comprehensive system of ab initio programs for advanced 
-    molecular electronic structure calculations
-    spack install molpro %intel@2021.1
-    spack install molpro %gcc@10.3.0
+    molecular electronic structure calculations.
     """
 
     homepage = "https://www.molpro.net"
@@ -27,10 +25,3 @@ class Molpro(CMakePackage):
     depends_on('python')
     depends_on('icu4c')
     depends_on('libxml2')
-
-    def cmake_args(self):
-        # FIXME: Add arguments other than
-        # FIXME: CMAKE_INSTALL_PREFIX and CMAKE_BUILD_TYPE
-        # FIXME: If not needed delete this function
-        args = []
-        return args
