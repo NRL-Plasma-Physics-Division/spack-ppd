@@ -20,7 +20,7 @@ the Molpro package in `spack-ppd` to point to it. Do `spack edit molpro` and
 update the `url` line to point to the file.
 
 We want to use the `cray-mpich` module and build a particular variant of
-Global Arrays (`armci=mpi-pr` and `scalapack=True`), 
+Global Arrays (`armci=openib` and `scalapack=True`), 
 which is all taken care of in the `.spack/packages.yaml` file. 
 The lines you need to add to `.spack/packages.yaml` are in `.spack/packages-narwhal.yaml`.
 Be sure not to change any of the other contents of the file, and only copy in the `mpich`
@@ -30,11 +30,11 @@ and `globalarrays` blocks--you only want one top-level `packages:` entry).
 packages:
   mpich:
     externals:
-    - spec: "mpich%gcc@10.3.0 arch=cray-sles15-zen2"
+    - spec: "mpich@8.1.5%gcc@10.3.0 arch=cray-sles15-zen2"
       modules:
       - cray-mpich
   globalarrays:
-    variants: [armci=mpi-pr, scalapack=True
+    variants: [armci=openib, scalapack=True]
 ```
 	
-Build and install Molpro with the command `spack install molpro %gcc`.
+Build and install Molpro with the command `spack install molpro %gcc@10.3.0 ^mpich@8.1.5`.
