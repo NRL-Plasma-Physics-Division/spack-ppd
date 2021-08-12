@@ -3,6 +3,6 @@ packages:
     externals:
     - spec: "mpich@8.1.5%gcc@10.3.0 arch=cray-sles15-zen2"
       modules:
-      - cray-mpich
+      - cray-mpich-ucx/8.1.5
   globalarrays:
     variants: [armci=openib, scalapack=True]
