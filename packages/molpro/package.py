@@ -21,14 +21,19 @@ class Molpro(AutotoolsPackage):
     depends_on('icu4c')
     depends_on('eigen')
     depends_on('mpi')
-    depends_on('cray-libsci')
+    depends_on('blas')
+    depends_on('netlib-lapack')
     depends_on('globalarrays')
     depends_on('libxml2')
 
-    def configure_args(self):
-        args = []
-
-        args.append('--cache-file=test-cache.txt')
-
-        return args
+    #def configure_args(self):
+#
+        ## Make sure we use Spack's blas/lapack:
+        #lapack_libs = spec['blas'].libs.joined(';')
+#
+        #args = [
+            #self.define('--with-lapack-path', lapack_libs),
+            #]
+#
+        #return args
 

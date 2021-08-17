@@ -1,13 +1,16 @@
 packages:
+  python:
+    externals:
+    - spec: "python"
+      modules:
+      - cray-python
   mpich:
     externals:
     - spec: "mpich@8.1.5%gcc@10.3.0 arch=cray-sles15-zen2"
       modules:
-      - cray-mpich-ucx/8.1.5
+      - cray-mpich/8.1.5
   globalarrays:
     variants: [armci=openib, scalapack=True]
-  cray-libsci:
-    externals:
-    - spec: "cray-libsci"
-      modules:
-      - cray-libsci
+  all:
+    providers:
+      mpi: [mpich]

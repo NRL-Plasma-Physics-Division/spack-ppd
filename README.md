@@ -45,11 +45,11 @@ likely take 20 minutes or more.
 ```shell
 $ spack cd --stage-dir molpro
 $ cd spack-src
-$ make MOLPRO_OPTIONS='-n1 -m28g' tuning
+$ make tuning
 ```
 
 Once the tuning process is complete, you will have a file named `tuning.rc` in the `spack-src/lib` folder. 
-You can either copy the file to `${MOLPRO_PREFIX}/lib/tuning.rc` or copy the contents to 
+You can either copy the file to `${MOLPRO_PREFIX}/molpro_2021.1/lib/tuning.rc` or copy the contents to 
 `${HOME}/.molprorc`. The former is probably the best approach since the tuning is specific to
 a given build of Molpro. To determine `${MOLPRO_PREFIX}` for the given build, run the following command
 and match the hash from the stage/build folder with the hash from the command's output:
@@ -74,8 +74,13 @@ Tried adding `make tuning` and `make test` steps to spack package, but molpro sc
 for nodefile and expects to be run on compute nodes.
 
 Tried running tuning on multiple MPI processes (`make MOLPRO_OPTIONS='-n128 -m28g' tuning`),
-but it seems it is meant for only one process.
+but it seems it is meant for only one process. Or, maybe the number of processes is handled
+automatically and should just do `make tuning` like the instrucions say (not
+`make MOLPRO_OPTIONS='-n1 -m28g' tuning`).
 
 Tried making the spack package as a CMakePackage, but couldn't figure out how to get the tests
 to build. The resulting executable seemed to run fine on one node, and the package file is
 `package_CMake_package.py`.
+
+When using cray-libsci, getting core dumps at the end of jobs. Doesn't seem to happen when using
+openblas, netlib-lapack, and netlib-scalapack.
