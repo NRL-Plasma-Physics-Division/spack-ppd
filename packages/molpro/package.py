@@ -37,3 +37,5 @@ class Molpro(AutotoolsPackage):
 #
         #return args
 
+    def setup_run_environment(self, env):
+        env.prepend_path('PATH', '{0}/molpro_2021.1/bin'.format(self.prefix))
