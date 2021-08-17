@@ -17,11 +17,11 @@ class Molpro(CMakePackage):
 
     version('20210528', sha256='c24937ae7119431c1efe972effc712530a3b948b8f2fe7191c9458191b1a4a65')
 
-    depends_on('eigen')
-    depends_on('lapack')
-    depends_on('openblas')
-    depends_on('mpi')
-    depends_on('globalarrays')
     depends_on('python')
     depends_on('icu4c')
+    depends_on('eigen')
+    depends_on('mpi')
+    depends_on('cray-libsci')
+    depends_on('globalarrays')
     depends_on('libxml2')
+

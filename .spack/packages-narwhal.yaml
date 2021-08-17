@@ -6,3 +6,8 @@ packages:
       - cray-mpich-ucx/8.1.5
   globalarrays:
     variants: [armci=openib, scalapack=True]
+  cray-libsci:
+    externals:
+    - spec: "cray-libsci"
+      modules:
+      - cray-libsci
