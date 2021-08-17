@@ -5,7 +5,7 @@
 from spack import *
 
 
-class Molpro(AutotoolsPackage):
+class Molpro(CMakePackage):
     """Molpro is a comprehensive system of ab initio programs for advanced 
     molecular electronic structure calculations.
     """
@@ -25,10 +25,18 @@ class Molpro(AutotoolsPackage):
     depends_on('globalarrays')
     depends_on('libxml2')
 
-    def configure_args(self):
-        args = []
-
-        args.append('--cache-file=test-cache.txt')
+    def cmake_args(self):
+        args = [
+                '-DBUILD_TESTING:BOOL=ON',
+                #'-DGCI_TEST:BOOL=ON',
+                #'-DSYMMETRY_MATRIX_COMPLEXDOUBLE:BOOL=ON',
+                #'-DSYMMETRY_MATRIX_DOUBLE:BOOL=ON',
+                #'-DSYMMETRY_MATRIX_FLOAT:BOOL=ON',
+                #'-DXCGRID_BUILD_TESTS:BOOL=ON',
+                #'-DWHATEVER:STRING=somevalue',
+                #self.define('ENABLE_BROKEN_FEATURE', False),
+                #self.define_from_variant('DETECT_HDF5', 'hdf5'),
+                #self.define_from_variant('THREADS'), # True if +threads
+                ]
 
         return args
-
