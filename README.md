@@ -39,13 +39,40 @@ perform some tests, requiring access to a compute node, so start an interactive 
 $ qsub -l ccm=1 -l select=1:ncpus=128:mpiprocs=128 -A NRLDC31794610 -q standard -l walltime=02:00:00 -I
 ```
 
-Go to the staging directory and perform the tuning an testing processes. The tuning step
-will likely take 10-20 minutes. Then re-install:
+Go to the staging directory and perform the tuning process which will
+likely take 20  minutes or more.
 
 ```shell
 $ spack cd --stage-dir molpro
 $ cd spack-build-[hash]
-$ make MOLPRO_OPTIONS='-n128 -m28g' tuning
-$ make MOLPRO_OPTIONS='-n128 -m28g' test
-$ make install
+$ make MOLPRO_OPTIONS='-n1 -m28g' tuning
 ```
+
+Once the tuning process is complete, you will have a file named `tuning.rc` in the `lib` folder. 
+You can either copy the file to `${MOLPRO_PREFIX}/lib/tuning.rc` or copy the contents to 
+`${HOME}/.molprorc`. The former is probably the best approach since the tuning is specific to
+a given build of Molpro. To determine `${MOLPRO_PREFIX}` for the given build, run the following command
+and match the hash from the stage/build folder with the hash from the command's output:
+
+```shell
+spack find --paths molpro
+```
+
+Finally, you can/should run the tests provided with Molpro:
+
+```shell
+$ make MOLPRO_OPTIONS='-n2 -m28g' test
+```
+
+### Molpro-Narwhal Lessons Learned
+
+So far, Molpro only runs on one node. This is probably an issue with mpich and global arrays.
+Possible remedy is to run tests in globalarrays to debug. Tried globalarrays variants 
+`armci=[mpi-ts, mpi-pr]` with no luck.
+
+Tried adding `make tuning` and `make test` steps to spack package, but molpro script looks
+for nodefile and expects to be run on compute nodes.
+
+Tried running tuning on multiple MPI processes (`make MOLPRO_OPTIONS='-n128 -m28g' tuning`),
+but it seems it is meant for only one process.
+
