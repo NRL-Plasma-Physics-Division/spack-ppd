@@ -43,9 +43,10 @@ Go to the staging directory and perform the tuning process which will
 likely take 20 minutes or more.
 
 ```shell
+$ spack load /hmzfood
 $ spack cd --stage-dir molpro
 $ cd spack-src
-$ make tuning
+$ make MOLPRO_OPTIONS='-M2g' tuning
 ```
 
 Once the tuning process is complete, you will have a file named `tuning.rc` in the `spack-src/lib` folder. 
@@ -61,7 +62,7 @@ spack find --paths molpro
 Finally, you can/should run the tests provided with Molpro:
 
 ```shell
-$ make MOLPRO_OPTIONS='-n2 -m28g' test
+$ make MOLPRO_OPTIONS='-n2 -M2g' test
 ```
 
 ### Molpro-Narwhal Lessons Learned
@@ -84,3 +85,6 @@ to build. The resulting executable seemed to run fine on one node, and the packa
 
 When using cray-libsci, getting core dumps at the end of jobs. Doesn't seem to happen when using
 openblas, netlib-lapack, and netlib-scalapack.
+
+Not sure what the `-M` option should be...seems to work for `-M2g` but not `-M20g` (that should
+work since 20 x 8 = 160GB). Also, must set `ARMCI_DEFAULT_SHMMAX=8192` (handled in `spack load molpro`).
