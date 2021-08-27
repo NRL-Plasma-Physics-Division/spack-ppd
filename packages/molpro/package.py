@@ -21,8 +21,7 @@ class Molpro(AutotoolsPackage):
     depends_on('icu4c')
     depends_on('eigen')
     depends_on('mpi')
-    depends_on('blas')
-    depends_on('netlib-lapack')
+    depends_on('cray-libsci')
     depends_on('globalarrays')
     depends_on('libxml2')
 
@@ -39,4 +38,4 @@ class Molpro(AutotoolsPackage):
 
     def setup_run_environment(self, env):
         env.prepend_path('PATH', '{0}/molpro_2021.1/bin'.format(self.prefix))
-        env.set('ARMCI_DEFAULT_SHMMAX', '8192')
+        env.set('ARMCI_DEFAULT_SHMMAX', '128')

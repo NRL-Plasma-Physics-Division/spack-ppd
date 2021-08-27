@@ -46,7 +46,7 @@ likely take 20 minutes or more.
 $ spack load /hmzfood
 $ spack cd --stage-dir molpro
 $ cd spack-src
-$ make MOLPRO_OPTIONS='-M2g' tuning
+$ make tuning
 ```
 
 Once the tuning process is complete, you will have a file named `tuning.rc` in the `spack-src/lib` folder. 
@@ -62,12 +62,12 @@ spack find --paths molpro
 Finally, you can/should run the tests provided with Molpro:
 
 ```shell
-$ make MOLPRO_OPTIONS='-n2 -M2g' test
+$ make MOLPRO_OPTIONS='-n2' test
 ```
 
 ### Molpro-Narwhal Lessons Learned
 
-So far, Molpro only runs on one node. This is probably an issue with mpich and global arrays.
+TODO: So far, Molpro only runs on one node. This is probably an issue with mpich and global arrays.
 Possible remedy is to run tests in globalarrays to debug. Tried globalarrays variants 
 `armci=[mpi-ts, mpi-pr]` with no luck.
 
@@ -83,8 +83,17 @@ Tried making the spack package as a CMakePackage, but couldn't figure out how to
 to build. The resulting executable seemed to run fine on one node, and the package file is
 `package_CMake_package.py`.
 
-When using cray-libsci, getting core dumps at the end of jobs. Doesn't seem to happen when using
-openblas, netlib-lapack, and netlib-scalapack.
+TODO: Latest build using cray-libsci + cray-mpich (from modules) has core dump at the end of successful job. 
+Doesn't seem to happen when using mpich + openblas + netlib-lapack + netlib-scalapack, but mpich and libsci 
+from modules seems more efficient.  Should try getting a stack trace to see what is happening at job termination.
 
-Not sure what the `-M` option should be...seems to work for `-M2g` but not `-M20g` (that should
-work since 20 x 8 = 160GB). Also, must set `ARMCI_DEFAULT_SHMMAX=8192` (handled in `spack load molpro`).
+See [the Molpro manual](https://www.molpro.net/manual/doku.php?id=general_program_structure#memory_allocation) 
+for info on allocating memory on a given machine. For narwhal standard nodes with 256GB RAM, perhaps these values work:
+
+- `-n 40 -m 375m -G 5000m` (40 CPUs on one node)
+- `-n 30 -m 575m -G 5750m`
+- `-n 20 -m 975m -G 6500m`
+- `-n 2 -m 11775m -G 7850m`
+
+Setting `ARMCI_DEFAULT_SHMMAX` in `spack load molpro` but not sure it matters.
+
